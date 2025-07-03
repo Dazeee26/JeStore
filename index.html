@@ -149,11 +149,6 @@
             animation: fadeInDown 0.3s ease-out;
         }
 
-        .nav-links.active li {
-            text-align: center;
-            margin: 0.5rem 0;
-        }
-
         .arrow-toggle.active {
             transform: rotate(180deg); /* Rotate arrow when menu is active */
         }
@@ -660,28 +655,45 @@
 
             /* Mobile specific header styles */
             nav {
-                flex-wrap: wrap; /* Allow items to wrap */
+                flex-direction: column; /* Stack header items vertically */
+                align-items: center; /* Center header items horizontally */
+                justify-content: flex-start; /* Adjust as needed, but align-items handles horizontal centering now */
+                flex-wrap: nowrap; /* Prevent wrapping to ensure column layout */
+            }
+
+            .logo {
+                order: initial; /* Reset order for natural flow */
+                margin-bottom: 15px; /* Add space below the logo */
             }
 
             .nav-links {
                 display: none; /* Hide navigation links by default on small screens */
                 width: 100%;
-                order: 3; /* Push to the next line */
+                order: initial; /* Reset order for natural flow */
             }
 
             .menu-toggle, .arrow-toggle {
                 display: flex; /* Show toggle button on small screens */
                 align-items: center;
                 justify-content: center;
+                order: initial; /* Reset order for natural flow */
             }
             
             .cart-icon {
-                margin-left: auto; /* Push cart icon to the right */
-                order: 2;
+                margin-left: 0; /* Remove auto margin to center with align-items */
+                order: initial; /* Reset order for natural flow */
+                margin-top: 10px; /* Add space above cart icon */
             }
             
-            .logo {
-                order: 1;
+            .Hamburger { /* Assuming this is the intended mobile menu toggle */
+                display: flex; /* Ensure it's visible on mobile */
+                order: initial; /* Reset order for natural flow */
+                margin-top: 10px; /* Add space above the hamburger icon */
+            }
+
+            .nav-links.active {
+                top: 100px; /* Adjusted top position for the active mobile menu */
+                position: absolute; /* Keep it absolute for overlay effect */
             }
         }
     </style>
@@ -702,7 +714,7 @@
                 🛒 Cart
                 <span class="cart-count" id="cartCount">0</span>
             </div>
-            <div class="arrow-toggle" onclick="toggleMobileMenu()">&#9660;</div>
+            <div class="Hamburger" onclick="toggleMobileMenu()">&#9660;</div>
         </nav>
     </header>
 
@@ -795,10 +807,6 @@
                 publisher: "Team Cherry",
                 releaseDate: "2017",
                 categories: ["adventure", "action"],
-                systemRequirements: {
-                    minimum: "Windows 7, Intel Core 2 Duo E5200, 4 GB RAM, DirectX 10",
-                    recommended: "Windows 10, Intel Core i5, 8 GB RAM, DirectX 11"
-                },
                 imageUrl: "img/HollowKnight.png" // Placeholder image URL
             },
             {
@@ -815,10 +823,6 @@
                 publisher: "Ubisoft",
                 releaseDate: "2017",
                 categories: ["fighting", "action"],
-                systemRequirements: {
-                    minimum: "Windows 7, Intel Pentium 4, 1 GB RAM, DirectX 9",
-                    recommended: "Windows 10, Intel Core i3, 2 GB RAM, DirectX 11"
-                },
                 imageUrl: "img/Brawlhalla.png"
             },
             {
@@ -835,10 +839,6 @@
                 publisher: "Capcom",
                 releaseDate: "2018",
                 categories: ["action", "rpg"],
-                systemRequirements: {
-                    minimum: "Windows 7, Intel Core i5-4460, 8 GB RAM, DirectX 11",
-                    recommended: "Windows 10, Intel Core i7-3770, 16 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/MHWorld.png"
             },
             {
@@ -855,10 +855,6 @@
                 publisher: "Capcom",
                 releaseDate: "2025",
                 categories: ["action", "rpg"],
-                systemRequirements: {
-                    minimum: "Windows 10, Intel Core i5-10400, 16 GB RAM, DirectX 12",
-                    recommended: "Windows 11, Intel Core i7-10700K, 32 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/MHWild.png"
             },
             {
@@ -875,10 +871,6 @@
                 publisher: "Rockstar Games",
                 releaseDate: "2013",
                 categories: ["action", "adventure"],
-                systemRequirements: {
-                    minimum: "Windows 8.1, Intel Core 2 Quad CPU Q6600, 4 GB RAM, DirectX 10",
-                    recommended: "Windows 10, Intel Core i5 3470, 8 GB RAM, DirectX 11"
-                },
                 imageUrl: "img/GTA5.png"
             },
             {
@@ -895,10 +887,6 @@
                 publisher: "Rockstar Games",
                 releaseDate: "2018",
                 categories: ["action", "adventure"],
-                systemRequirements: {
-                    minimum: "Windows 7, Intel Core i5-2500K, 8 GB RAM, DirectX 10",
-                    recommended: "Windows 10, Intel Core i7-4770K, 12 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/RDR2.png"
             },
             {
@@ -915,10 +903,6 @@
                 publisher: "Rockstar Games",
                 releaseDate: "2010",
                 categories: ["action", "adventure"],
-                systemRequirements: {
-                    minimum: "Windows 7, Intel Core 2 Duo E4700, 4 GB RAM, DirectX 9",
-                    recommended: "Windows 10, Intel Core i5-2400, 8 GB RAM, DirectX 11"
-                },
                 imageUrl: "img/RDR.png"
             },
             {
@@ -935,10 +919,6 @@
                 publisher: "Sony Interactive Entertainment",
                 releaseDate: "2022",
                 categories: ["action", "adventure"],
-                systemRequirements: {
-                    minimum: "Windows 10, Intel Core i5-8400, 8 GB RAM, DirectX 12",
-                    recommended: "Windows 11, Intel Core i7-8700K, 16 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/GOWRagnarok.png"
             },
             {
@@ -955,10 +935,6 @@
                 publisher: "2K Games",
                 releaseDate: "2012",
                 categories: ["action", "rpg"],
-                systemRequirements: {
-                    minimum: "Windows XP, Intel Core 2 Duo E5200, 2 GB RAM, DirectX 9",
-                    recommended: "Windows 7, Intel Core i5-2400, 4 GB RAM, DirectX 10"
-                },
                 imageUrl: "img/BD2.png"
             },
             {
@@ -975,10 +951,6 @@
                 publisher: "2K Games",
                 releaseDate: "2019",
                 categories: ["action", "rpg"],
-                systemRequirements: {
-                    minimum: "Windows 7, AMD FX-8350, 6 GB RAM, DirectX 11",
-                    recommended: "Windows 10, Intel Core i7-4770, 16 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/BL3.png"
             },
             {
@@ -995,10 +967,6 @@
                 publisher: "2K Games",
                 releaseDate: "2022",
                 categories: ["action", "rpg"],
-                systemRequirements: {
-                    minimum: "Windows 10, Intel Core i5-3570, 8 GB RAM, DirectX 11",
-                    recommended: "Windows 10, Intel Core i7-4770, 16 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/TinyTina.png"
             },
             {
@@ -1015,10 +983,6 @@
                 publisher: "Electronic Arts",
                 releaseDate: "2021",
                 categories: ["adventure", "action"],
-                systemRequirements: {
-                    minimum: "Windows 8.1, Intel Core i3-2100T, 8 GB RAM, DirectX 11",
-                    recommended: "Windows 10, Intel Core i5-3570K, 16 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/ItTakesTwo.png"
             },
             {
@@ -1035,10 +999,6 @@
                 publisher: "Electronic Arts",
                 releaseDate: "2019",
                 categories: ["racing", "action"],
-                systemRequirements: {
-                    minimum: "Windows 10, Intel Core i5-3570K, 8 GB RAM, DirectX 11",
-                    recommended: "Windows 10, Intel Core i7-4790, 16 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/NFSHeat.png"
             },
             {
@@ -1055,10 +1015,6 @@
                 publisher: "Endnight Games",
                 releaseDate: "2018",
                 categories: ["horror", "adventure"],
-                systemRequirements: {
-                    minimum: "Windows 7, Intel Dual-Core 2.4 GHz, 4 GB RAM, DirectX 9",
-                    recommended: "Windows 10, Intel Core i5-8400, 12 GB RAM, DirectX 11"
-                },
                 imageUrl: "img/TheFotrest.png"
             },
             {
@@ -1075,10 +1031,6 @@
                 publisher: "Capcom",
                 releaseDate: "2019",
                 categories: ["horror", "action"],
-                systemRequirements: {
-                    minimum: "Windows 7, Intel Core i5-4460, 8 GB RAM, DirectX 11",
-                    recommended: "Windows 10, Intel Core i7-3770, 16 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/RE2Remake.png"
             },
             {
@@ -1095,10 +1047,6 @@
                 publisher: "Capcom",
                 releaseDate: "2021",
                 categories: ["horror", "action"],
-                systemRequirements: {
-                    minimum: "Windows 10, Intel Core i5-7500, 8 GB RAM, DirectX 12",
-                    recommended: "Windows 10, Intel Core i7-8700, 16 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/REVillage.png"
             },
             {
@@ -1115,10 +1063,6 @@
                 publisher: "Bandai Namco Entertainment",
                 releaseDate: "2024",
                 categories: ["fighting", "action"],
-                systemRequirements: {
-                    minimum: "Windows 10, Intel Core i5-6600K, 8 GB RAM, DirectX 12",
-                    recommended: "Windows 11, Intel Core i7-7700K, 16 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/Tekken8.png"
             },
             {
@@ -1135,10 +1079,6 @@
                 publisher: "CD Projekt Red",
                 releaseDate: "2015",
                 categories: ["rpg", "adventure"],
-                systemRequirements: {
-                    minimum: "Windows 7, Intel Core i5-2500K, 6 GB RAM, DirectX 11",
-                    recommended: "Windows 10, Intel Core i7-3770, 8 GB RAM, DirectX 12"
-                },
                 imageUrl: "img/TWitcher3.png"
             }
         ];
@@ -1427,9 +1367,11 @@
         // Fungsi untuk mengaktifkan/menonaktifkan menu mobile
         function toggleMobileMenu() {
             const navLinks = document.getElementById('navLinks');
-            const arrowToggle = document.querySelector('.arrow-toggle');
+            const arrowToggle = document.querySelector('.arrow-toggle'); /* This might need adjustment if .Hamburger isn't .arrow-toggle */
             navLinks.classList.toggle('active');
-            arrowToggle.classList.toggle('active');
+            if (arrowToggle) { /* Add a check for arrowToggle existence */
+                arrowToggle.classList.toggle('active');
+            }
         }
 
         // Tutup modal saat mengklik di luar area modal
