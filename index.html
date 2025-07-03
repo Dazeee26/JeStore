@@ -607,46 +607,8 @@
                 width: 100%;
             }
 
-            /* --- Header adjustments for mobile --- */
-            header .container {
-                flex-direction: column; /* Stack logo, nav, and cart vertically */
-                align-items: center; /* Center items horizontally */
-                padding: 1rem 10px; /* Reduce horizontal padding for smaller screens */
-            }
-
-            .logo {
-                font-size: 1.5rem; /* Smaller logo text on mobile */
-                margin-bottom: 10px; /* Space between logo and nav links */
-            }
-
-            .logo img {
-                height: 30px; /* Smaller logo image on mobile */
-            }
-
-            .nav-links {
-                flex-direction: column; /* Stack nav links vertically */
-                gap: 0.5rem; /* Reduce gap between nav links */
-                margin-bottom: 10px; /* Space between nav links and cart icon */
-                width: 100%; /* Make nav links take full width */
-                text-align: center; /* Center nav links */
-            }
-
-            .nav-links li {
-                width: 100%; /* Make each list item take full width */
-            }
-
-            .nav-links a {
-                padding: 0.5rem 0; /* Add padding for easier tapping */
-                display: block; /* Make links block-level for full width tap area */
-            }
-
-            .cart-icon {
-                padding: 0.4rem 0.8rem; /* Smaller padding for cart icon */
-                font-size: 0.9rem; /* Smaller font size for cart icon */
-            }
-
             main {
-                margin-top: 160px; /* Adjust margin-top to account for taller fixed header on mobile */
+                margin-top: 80px; /* Reset margin-top for fixed header on mobile if header doesn't expand */
             }
 
             .hero h1 {
