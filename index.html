@@ -107,6 +107,57 @@
             font-weight: bold;
         }
 
+        /* Hamburger menu/Toggle button for mobile */
+        .menu-toggle {
+            display: none; /* Hidden by default, shown on smaller screens */
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            z-index: 1001; /* Ensure it's above other elements */
+        }
+
+        .menu-toggle .bar {
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Downward arrow icon for mobile */
+        .arrow-toggle {
+            display: none; /* Hidden by default, shown on smaller screens */
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        /* Styles for when menu is open */
+        .nav-links.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 60px; /* Adjust based on header height */
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 1rem 0;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            animation: fadeInDown 0.3s ease-out;
+        }
+
+        .nav-links.active li {
+            text-align: center;
+            margin: 0.5rem 0;
+        }
+
+        .arrow-toggle.active {
+            transform: rotate(180deg); /* Rotate arrow when menu is active */
+        }
+
         /* Main Content Area */
         main {
             margin-top: 80px; /* Space for fixed header */
@@ -607,69 +658,30 @@
                 width: 100%;
             }
 
-            /* --- Header adjustments for mobile --- */
-            header .container {
-                flex-direction: column; /* Stack logo, nav, and cart vertically */
-                align-items: center; /* Center items horizontally */
-                padding: 1rem 10px; /* Reduce horizontal padding for smaller screens */
-            }
-
-            .logo {
-                font-size: 1.5rem; /* Smaller logo text on mobile */
-                margin-bottom: 10px; /* Space between logo and nav links */
-            }
-
-            .logo img {
-                height: 30px; /* Smaller logo image on mobile */
+            /* Mobile specific header styles */
+            nav {
+                flex-wrap: wrap; /* Allow items to wrap */
             }
 
             .nav-links {
-                flex-direction: column; /* Stack nav links vertically */
-                gap: 0.5rem; /* Reduce gap between nav links */
-                margin-bottom: 10px; /* Space between nav links and cart icon */
-                width: 100%; /* Make nav links take full width */
-                text-align: center; /* Center nav links */
+                display: none; /* Hide navigation links by default on small screens */
+                width: 100%;
+                order: 3; /* Push to the next line */
             }
 
-            .nav-links li {
-                width: 100%; /* Make each list item take full width */
-            }
-
-            .nav-links a {
-                padding: 0.5rem 0; /* Add padding for easier tapping */
-                display: block; /* Make links block-level for full width tap area */
-            }
-
-            .cart-icon {
-                padding: 0.4rem 0.8rem; /* Smaller padding for cart icon */
-                font-size: 0.9rem; /* Smaller font size for cart icon */
-            }
-
-            main {
-                margin-top: 160px; /* Adjust margin-top to account for taller fixed header on mobile */
-            }
-
-            .hero h1 {
-                font-size: 2rem; /* Smaller hero title on mobile */
-            }
-
-            .hero p {
-                font-size: 1rem; /* Smaller hero paragraph on mobile */
-            }
-
-            .filter-controls {
-                flex-direction: column; /* Stack filter buttons vertically */
+            .menu-toggle, .arrow-toggle {
+                display: flex; /* Show toggle button on small screens */
                 align-items: center;
-                gap: 0.8rem; /* Adjust gap */
+                justify-content: center;
             }
-
-            .filter-btn {
-                width: 80%; /* Make filter buttons wider */
+            
+            .cart-icon {
+                margin-left: auto; /* Push cart icon to the right */
+                order: 2;
             }
-
-            .games-grid {
-                grid-template-columns: 1fr; /* Single column for game cards on very small screens */
-                padding: 0 10px; /* Add some horizontal padding */
+            
+            .logo {
+                order: 1;
             }
         }
     </style>
@@ -680,16 +692,17 @@
             <div class="logo">
                 <img src="img/LOGO.png" alt="JeStore" style="height: 40px; vertical-align: middle; margin-right: 8px;"></span> JeStore
             </div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#games">Games</a></li>
-                <li><a href="#categories">Categories</a></li>
-                <li><a href="#about">About</a></li>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" onclick="toggleMobileMenu()">Home</a></li>
+                <li><a href="#games" onclick="toggleMobileMenu()">Games</a></li>
+                <li><a href="#categories" onclick="toggleMobileMenu()">Categories</a></li>
+                <li><a href="#about" onclick="toggleMobileMenu()">About</a></li>
             </ul>
             <div class="cart-icon" onclick="toggleCartPage()">
                 🛒 Cart
                 <span class="cart-count" id="cartCount">0</span>
             </div>
+            <div class="arrow-toggle" onclick="toggleMobileMenu()">&#9660;</div>
         </nav>
     </header>
 
@@ -1145,7 +1158,7 @@
             // Fungsionalitas pencarian
             document.getElementById('searchInput').addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase();
-                filteredGames = games.filter(game =>
+                filteredGames = games.filter(game => 
                     game.title.toLowerCase().includes(searchTerm) ||
                     game.genre.toLowerCase().includes(searchTerm) ||
                     game.description.toLowerCase().includes(searchTerm)
@@ -1160,7 +1173,7 @@
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                     // Tambahkan kelas 'active' ke tombol yang diklik
                     this.classList.add('active');
-
+                    
                     const filter = this.dataset.filter; // Ambil nilai data-filter
                     if (filter === 'all') {
                         filteredGames = games; // Jika 'all', tampilkan semua game
@@ -1197,14 +1210,14 @@
                         </button>
                     </div>
                 `;
-
+                
                 // Tambahkan event listener untuk menampilkan detail game saat card diklik (kecuali tombol add-to-cart)
                 gameCard.addEventListener('click', function(e) {
                     if (!e.target.classList.contains('add-to-cart')) {
                         showGameDetail(game.id);
                     }
                 });
-
+                
                 gamesGrid.appendChild(gameCard);
             });
         }
@@ -1225,7 +1238,7 @@
             if (game && !cart.find(item => item.id === gameId)) {
                 cart.push({...game, quantity: 1}); // Tambahkan game ke keranjang dengan quantity 1
                 updateCartDisplay(); // Perbarui tampilan keranjang
-
+                
                 // Tampilkan notifikasi
                 showNotification(`${game.title} ditambahkan ke keranjang!`);
                 console.log('Game ditambahkan ke keranjang:', game.title, 'Keranjang saat ini:', cart); // Log untuk debugging
@@ -1247,9 +1260,9 @@
             const cartCount = document.getElementById('cartCount');
             const cartItemsList = document.getElementById('cartItemsList'); // Menggunakan ID baru untuk daftar item
             const cartSummaryTotal = document.getElementById('cartSummaryTotal'); // Menggunakan ID baru untuk total ringkasan
-
+            
             cartCount.textContent = cart.length; // Perbarui jumlah item di ikon keranjang
-
+            
             if (cart.length === 0) {
                 cartItemsList.innerHTML = '<p style="text-align: center; opacity: 0.7; padding: 2rem;">Keranjang kosong</p>';
                 cartSummaryTotal.textContent = 'Rp 0';
@@ -1272,7 +1285,7 @@
                             </div>
                     </div>
                 `).join(''); // Gabungkan semua string HTML
-
+                
                 // Hitung total harga
                 const total = cart.reduce((sum, item) => sum + item.price, 0);
                 cartSummaryTotal.textContent = formatPrice(total);
@@ -1295,7 +1308,7 @@
 
             const modal = document.getElementById('gameModal');
             const content = document.getElementById('gameDetailContent');
-
+            
             // Isi konten modal detail game
             content.innerHTML = `
                 <div class="game-detail-image" style="background-image: url('${game.imageUrl}'); background-size: cover; background-position: center;"></div>
@@ -1345,7 +1358,7 @@
                     </button>
                 </div>
             `;
-
+            
             modal.style.display = 'block'; // Tampilkan modal
             console.log('Modal detail game dibuka untuk ID:', gameId); // Log untuk debugging
         }
@@ -1363,19 +1376,19 @@
                 console.log('Checkout gagal: Keranjang kosong.'); // Log untuk debugging
                 return;
             }
-
+            
             const total = cart.reduce((sum, item) => sum + item.price, 0);
             const gameList = cart.map(item => `- ${item.title} (${item.price === 0 ? 'GRATIS' : formatPrice(item.price)})`).join('\n');
-
+            
             const whatsappNumber = '6281367685245'; // Ganti dengan nomor WhatsApp Anda
             const message = `Halo JeStore, saya ingin memesan game berikut:\n\n${gameList}\n\nTotal Pembayaran: ${formatPrice(total)}\n\nMohon informasinya untuk proses pembayaran selanjutnya. Terima kasih!`;
-
+            
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-
+            
             window.open(whatsappUrl, '_blank'); // Buka link WhatsApp di tab baru
-
+            
             showNotification('Anda akan diarahkan ke WhatsApp untuk menyelesaikan pembayaran.');
-
+            
             cart = []; // Kosongkan keranjang setelah checkout
             updateCartDisplay(); // Perbarui tampilan keranjang
             toggleCartPage(); // Tutup modal keranjang halaman penuh
@@ -1398,9 +1411,9 @@
                 animation: slideIn 0.3s ease-out;
             `;
             notification.textContent = message;
-
+            
             document.body.appendChild(notification);
-
+            
             // Hapus notifikasi setelah 3 detik dengan animasi fade out
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.3s ease-in';
@@ -1411,11 +1424,19 @@
             console.log('Notifikasi ditampilkan:', message); // Log untuk debugging
         }
 
+        // Fungsi untuk mengaktifkan/menonaktifkan menu mobile
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const arrowToggle = document.querySelector('.arrow-toggle');
+            navLinks.classList.toggle('active');
+            arrowToggle.classList.toggle('active');
+        }
+
         // Tutup modal saat mengklik di luar area modal
         window.onclick = function(event) {
             const gameModal = document.getElementById('gameModal');
-            const cartPageModal = document.getElementById('cartPageModal');
-
+            const cartPageModal = document.getElementById('cartPageModal'); 
+            
             if (event.target === gameModal) {
                 closeModal();
             }
@@ -1431,7 +1452,7 @@
                 from { transform: translateX(100%); opacity: 0; }
                 to { transform: translateX(0); opacity: 1; }
             }
-
+            
             @keyframes slideOut {
                 from { transform: translateX(0); opacity: 1; }
                 to { transform: translateX(100%); opacity: 0; }
