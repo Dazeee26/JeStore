@@ -606,6 +606,71 @@
             .cart-item-remove-btn {
                 width: 100%;
             }
+
+            /* --- Header adjustments for mobile --- */
+            header .container {
+                flex-direction: column; /* Stack logo, nav, and cart vertically */
+                align-items: center; /* Center items horizontally */
+                padding: 1rem 10px; /* Reduce horizontal padding for smaller screens */
+            }
+
+            .logo {
+                font-size: 1.5rem; /* Smaller logo text on mobile */
+                margin-bottom: 10px; /* Space between logo and nav links */
+            }
+
+            .logo img {
+                height: 30px; /* Smaller logo image on mobile */
+            }
+
+            .nav-links {
+                flex-direction: column; /* Stack nav links vertically */
+                gap: 0.5rem; /* Reduce gap between nav links */
+                margin-bottom: 10px; /* Space between nav links and cart icon */
+                width: 100%; /* Make nav links take full width */
+                text-align: center; /* Center nav links */
+            }
+
+            .nav-links li {
+                width: 100%; /* Make each list item take full width */
+            }
+
+            .nav-links a {
+                padding: 0.5rem 0; /* Add padding for easier tapping */
+                display: block; /* Make links block-level for full width tap area */
+            }
+
+            .cart-icon {
+                padding: 0.4rem 0.8rem; /* Smaller padding for cart icon */
+                font-size: 0.9rem; /* Smaller font size for cart icon */
+            }
+
+            main {
+                margin-top: 160px; /* Adjust margin-top to account for taller fixed header on mobile */
+            }
+
+            .hero h1 {
+                font-size: 2rem; /* Smaller hero title on mobile */
+            }
+
+            .hero p {
+                font-size: 1rem; /* Smaller hero paragraph on mobile */
+            }
+
+            .filter-controls {
+                flex-direction: column; /* Stack filter buttons vertically */
+                align-items: center;
+                gap: 0.8rem; /* Adjust gap */
+            }
+
+            .filter-btn {
+                width: 80%; /* Make filter buttons wider */
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr; /* Single column for game cards on very small screens */
+                padding: 0 10px; /* Add some horizontal padding */
+            }
         }
     </style>
 </head>
@@ -657,23 +722,19 @@
             <div class="container">
                 <h2>Game Terpopuler</h2>
                 <div class="games-grid" id="gamesGrid">
-                    <!-- Games will be populated by JavaScript -->
-                </div>
+                    </div>
             </div>
         </section>
     </main>
 
-    <!-- Game Detail Modal -->
     <div id="gameModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <div id="gameDetailContent">
-                <!-- Game details will be populated by JavaScipt -->
-            </div>
+                </div>
         </div>
     </div>
 
-    <!-- Cart Page Modal (New Full Page Style) -->
     <div id="cartPageModal" class="cart-page-modal">
         <div class="cart-page-content">
             <span class="cart-page-close" onclick="toggleCartPage()">&times;</span>
@@ -682,8 +743,7 @@
             </div>
             <div class="cart-main-layout">
                 <div class="cart-items-list" id="cartItemsList">
-                    <!-- Cart items will be populated by JavaScript -->
-                </div>
+                    </div>
                 <div class="cart-summary">
                     <div>
                         <h3>Ringkasan Pesanan</h3>
@@ -1085,7 +1145,7 @@
             // Fungsionalitas pencarian
             document.getElementById('searchInput').addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase();
-                filteredGames = games.filter(game => 
+                filteredGames = games.filter(game =>
                     game.title.toLowerCase().includes(searchTerm) ||
                     game.genre.toLowerCase().includes(searchTerm) ||
                     game.description.toLowerCase().includes(searchTerm)
@@ -1100,7 +1160,7 @@
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                     // Tambahkan kelas 'active' ke tombol yang diklik
                     this.classList.add('active');
-                    
+
                     const filter = this.dataset.filter; // Ambil nilai data-filter
                     if (filter === 'all') {
                         filteredGames = games; // Jika 'all', tampilkan semua game
@@ -1137,14 +1197,14 @@
                         </button>
                     </div>
                 `;
-                
+
                 // Tambahkan event listener untuk menampilkan detail game saat card diklik (kecuali tombol add-to-cart)
                 gameCard.addEventListener('click', function(e) {
                     if (!e.target.classList.contains('add-to-cart')) {
                         showGameDetail(game.id);
                     }
                 });
-                
+
                 gamesGrid.appendChild(gameCard);
             });
         }
@@ -1165,7 +1225,7 @@
             if (game && !cart.find(item => item.id === gameId)) {
                 cart.push({...game, quantity: 1}); // Tambahkan game ke keranjang dengan quantity 1
                 updateCartDisplay(); // Perbarui tampilan keranjang
-                
+
                 // Tampilkan notifikasi
                 showNotification(`${game.title} ditambahkan ke keranjang!`);
                 console.log('Game ditambahkan ke keranjang:', game.title, 'Keranjang saat ini:', cart); // Log untuk debugging
@@ -1187,9 +1247,9 @@
             const cartCount = document.getElementById('cartCount');
             const cartItemsList = document.getElementById('cartItemsList'); // Menggunakan ID baru untuk daftar item
             const cartSummaryTotal = document.getElementById('cartSummaryTotal'); // Menggunakan ID baru untuk total ringkasan
-            
+
             cartCount.textContent = cart.length; // Perbarui jumlah item di ikon keranjang
-            
+
             if (cart.length === 0) {
                 cartItemsList.innerHTML = '<p style="text-align: center; opacity: 0.7; padding: 2rem;">Keranjang kosong</p>';
                 cartSummaryTotal.textContent = 'Rp 0';
@@ -1209,11 +1269,10 @@
                         </div>
                         <div class="cart-item-actions">
                             <button class="cart-item-remove-btn" onclick="removeFromCart(${item.id})">Hapus</button>
-                            <!-- Tambahkan opsi lain di sini jika diperlukan, misal "Move to Wishlist" -->
-                        </div>
+                            </div>
                     </div>
                 `).join(''); // Gabungkan semua string HTML
-                
+
                 // Hitung total harga
                 const total = cart.reduce((sum, item) => sum + item.price, 0);
                 cartSummaryTotal.textContent = formatPrice(total);
@@ -1236,7 +1295,7 @@
 
             const modal = document.getElementById('gameModal');
             const content = document.getElementById('gameDetailContent');
-            
+
             // Isi konten modal detail game
             content.innerHTML = `
                 <div class="game-detail-image" style="background-image: url('${game.imageUrl}'); background-size: cover; background-position: center;"></div>
@@ -1286,7 +1345,7 @@
                     </button>
                 </div>
             `;
-            
+
             modal.style.display = 'block'; // Tampilkan modal
             console.log('Modal detail game dibuka untuk ID:', gameId); // Log untuk debugging
         }
@@ -1304,19 +1363,19 @@
                 console.log('Checkout gagal: Keranjang kosong.'); // Log untuk debugging
                 return;
             }
-            
+
             const total = cart.reduce((sum, item) => sum + item.price, 0);
             const gameList = cart.map(item => `- ${item.title} (${item.price === 0 ? 'GRATIS' : formatPrice(item.price)})`).join('\n');
-            
+
             const whatsappNumber = '6281367685245'; // Ganti dengan nomor WhatsApp Anda
             const message = `Halo JeStore, saya ingin memesan game berikut:\n\n${gameList}\n\nTotal Pembayaran: ${formatPrice(total)}\n\nMohon informasinya untuk proses pembayaran selanjutnya. Terima kasih!`;
-            
+
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            
+
             window.open(whatsappUrl, '_blank'); // Buka link WhatsApp di tab baru
-            
+
             showNotification('Anda akan diarahkan ke WhatsApp untuk menyelesaikan pembayaran.');
-            
+
             cart = []; // Kosongkan keranjang setelah checkout
             updateCartDisplay(); // Perbarui tampilan keranjang
             toggleCartPage(); // Tutup modal keranjang halaman penuh
@@ -1339,9 +1398,9 @@
                 animation: slideIn 0.3s ease-out;
             `;
             notification.textContent = message;
-            
+
             document.body.appendChild(notification);
-            
+
             // Hapus notifikasi setelah 3 detik dengan animasi fade out
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.3s ease-in';
@@ -1355,8 +1414,8 @@
         // Tutup modal saat mengklik di luar area modal
         window.onclick = function(event) {
             const gameModal = document.getElementById('gameModal');
-            const cartPageModal = document.getElementById('cartPageModal'); 
-            
+            const cartPageModal = document.getElementById('cartPageModal');
+
             if (event.target === gameModal) {
                 closeModal();
             }
@@ -1372,7 +1431,7 @@
                 from { transform: translateX(100%); opacity: 0; }
                 to { transform: translateX(0); opacity: 1; }
             }
-            
+
             @keyframes slideOut {
                 from { transform: translateX(0); opacity: 1; }
                 to { transform: translateX(100%); opacity: 0; }
