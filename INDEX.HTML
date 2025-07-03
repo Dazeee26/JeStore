@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JeStore - Digital Gaming Platform</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298); /* Gradient background */
+            color: white;
+            line-height: 1.6;
+        }
+
+        /* Container for content centering */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styling */
+        header {
+            background: rgba(0, 0, 0, 0.9); /* Semi-transparent background */
+            padding: 1rem 0;
+            position: fixed; /* Fixed header */
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px); /* Blur effect for transparency */
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4); /* Gradient text color */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex; /* Menggunakan flexbox untuk mensejajarkan ikon dan teks */
+            align-items: center; /* Pusatkan secara vertikal */
+            gap: 10px; /* Jarak antara ikon dan teks */
+        }
+
+        .logo .icon {
+            font-size: 2rem; /* Ukuran ikon */
+            -webkit-text-fill-color: white; /* Pastikan ikon terlihat putih */
+            background: none; /* Hapus gradient dari ikon */
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #4ecdc4; /* Highlight on hover */
+        }
+
+        .cart-icon {
+            position: relative;
+            background: #ff6b6b; /* Red background for cart icon */
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.05); /* Slight scale up on hover */
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #fff;
+            color: #ff6b6b;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Main Content Area */
+        main {
+            margin-top: 80px; /* Space for fixed header */
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23000" width="1200" height="600"/><circle fill="%23ff6b6b" cx="200" cy="150" r="50" opacity="0.3"/><circle fill="%234ecdc4" cx="800" cy="200" r="70" opacity="0.3"/><circle fill="%23ffe66d" cx="1000" cy="400" r="60" opacity="0.3"/></svg>');
+            background-size: cover;
+            background-position: center;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .search-bar {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1); /* Semi-transparent input */
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: rgba(0,0,0,0.3);
+            padding: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #4ecdc4; /* Highlight active/hover button */
+            transform: translateY(-2px);
+        }
+
+        /* Game Grid Section */
+        .games-section {
+            padding: 3rem 0;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .game-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px); /* Lift effect on hover */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2); /* Placeholder image gradient */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .game-info {
+            padding: 1.5rem;
+        }
+
+        .game-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-genre {
+            color: #4ecdc4;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .game-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffe66d; /* Yellow color for price */
+            margin-bottom: 1rem;
+        }
+
+        .game-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stars {
+            color: #ffe66d; /* Yellow color for stars */
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52); /* Red gradient button */
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: linear-gradient(45deg, #ee5a52, #ff6b6b);
+            transform: scale(1.02);
+        }
+
+        /* Game Detail Modal */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8); /* Dark overlay */
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh; /* Max height for scrollable content */
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .game-detail-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #667eea, #764ba2); /* Placeholder image gradient */
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .game-detail-info h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-detail-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive meta grid */
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .meta-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .meta-label {
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        /* Cart Page Modal Styling (New) */
+        .cart-page-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8); /* Dark overlay */
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+            overflow-y: auto; /* Enable scrolling for content */
+            padding: 20px; /* Padding around the modal content */
+        }
+
+        .cart-page-modal.active {
+            display: block; /* Show when active */
+        }
+
+        .cart-page-content {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 1000px; /* Wider modal */
+            margin: 50px auto; /* Center the modal with some top margin */
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .cart-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 1rem;
+        }
+
+        .cart-page-header h2 {
+            font-size: 2rem;
+            color: #4ecdc4;
+        }
+
+        .cart-page-close {
+            font-size: 2.5rem;
+            cursor: pointer;
+            color: #fff;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .cart-main-layout {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            gap: 2rem;
+        }
+
+        .cart-items-list {
+            flex: 2; /* Take more space */
+            min-width: 300px; /* Minimum width for items list */
+        }
+
+        .cart-summary {
+            flex: 1; /* Take less space */
+            min-width: 250px; /* Minimum width for summary */
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Push checkout button to bottom */
+        }
+
+        .cart-summary h3 {
+            margin-bottom: 1rem;
+            color: #ffe66d;
+        }
+
+        .cart-summary-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-summary-total {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 1rem;
+        }
+
+        .cart-item-full {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .cart-item-full-image {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            flex-shrink: 0; /* Prevent image from shrinking */
+            background-size: cover; /* Pastikan gambar mengisi area */
+            background-position: center; /* Pusatkan gambar */
+        }
+
+        .cart-item-full-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-full-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .cart-item-full-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-full-price-info {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .cart-item-full-original-price {
+            text-decoration: line-through;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .cart-item-full-discount {
+            background: #4ecdc4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .cart-item-full-current-price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffe66d;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .cart-item-remove-btn {
+            background: #ff6b6b;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cart-item-remove-btn:hover {
+            background: #ee5a52;
+        }
+
+        .cart-info-box {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .cart-info-box h4 {
+            color: #4ecdc4;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-info-box p {
+            opacity: 0.8;
+        }
+
+        .continue-shopping-btn {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .continue-shopping-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.02);
+        }
+
+        /* Responsive adjustments for cart page modal */
+        @media (max-width: 768px) {
+            .cart-page-content {
+                margin: 20px auto;
+                padding: 1rem;
+            }
+            .cart-main-layout {
+                flex-direction: column; /* Stack items vertically */
+            }
+            .cart-items-list, .cart-summary {
+                min-width: unset; /* Remove min-width to allow full width */
+                width: 100%;
+            }
+            .cart-item-full {
+                flex-direction: column; /* Stack image and details vertically */
+                align-items: flex-start;
+            }
+            .cart-item-full-image {
+                width: 100%;
+                height: 150px; /* Adjust height for better mobile view */
+                margin-bottom: 0.5rem;
+            }
+            .cart-item-actions {
+                width: 100%;
+                align-items: stretch; /* Stretch buttons to full width */
+            }
+            .cart-item-remove-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <img src="img/LOGO.png" alt="JeStore" style="height: 40px; vertical-align: middle; margin-right: 8px;"></span> JeStore
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#games">Games</a></li>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+            <div class="cart-icon" onclick="toggleCartPage()">
+                🛒 Cart
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Discover Amazing Games</h1>
+                <p>Platform digital gaming terbaik untuk semua kebutuhan gaming Anda</p>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Cari game favorit Anda...">
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <div class="container">
+                <div class="filter-controls">
+                    <button class="filter-btn active" data-filter="all">Semua Game</button>
+                    <button class="filter-btn" data-filter="action">Action</button>
+                    <button class="filter-btn" data-filter="adventure">Adventure</button>
+                    <button class="filter-btn" data-filter="rpg">RPG</button>
+                    <button class="filter-btn" data-filter="racing">Racing</button>
+                    <button class="filter-btn" data-filter="horror">Horror</button>
+                    <button class="filter-btn" data-filter="fighting">Fighting</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="games-section">
+            <div class="container">
+                <h2>Game Terpopuler</h2>
+                <div class="games-grid" id="gamesGrid">
+                    <!-- Games will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Game Detail Modal -->
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="gameDetailContent">
+                <!-- Game details will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Page Modal (New Full Page Style) -->
+    <div id="cartPageModal" class="cart-page-modal">
+        <div class="cart-page-content">
+            <span class="cart-page-close" onclick="toggleCartPage()">&times;</span>
+            <div class="cart-page-header">
+                <h2>Keranjang Belanja Anda</h2>
+            </div>
+            <div class="cart-main-layout">
+                <div class="cart-items-list" id="cartItemsList">
+                    <!-- Cart items will be populated by JavaScript -->
+                </div>
+                <div class="cart-summary">
+                    <div>
+                        <h3>Ringkasan Pesanan</h3>
+                        <div class="cart-summary-line">
+                            <span>Estimasi Total</span>
+                            <span id="cartSummaryTotal">Rp 0</span>
+                        </div>
+                        <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">Pajak penjualan akan dihitung saat checkout bila berlaku.</p>
+                    </div>
+                    <button class="checkout-btn" onclick="checkout()">Lanjutkan ke WhatsApp <span style="font-size: 1.2em; vertical-align: middle;">&#x1F4AC;</span></button>
+                    <button class="continue-shopping-btn" onclick="toggleCartPage()">Lanjutkan Belanja</button>
+                </div>
+            </div>
+            <div class="cart-info-box">
+                <h4>Informasi Pembelian</h4>
+                <p>Pembelian produk digital memberikan Anda lisensi untuk produk tersebut di JeStore.</p>
+                <p style="margin-top: 0.5rem;">Untuk syarat dan ketentuan lengkap, silakan lihat <a href="#" style="color: #4ecdc4; text-decoration: none;">Perjanjian Pelanggan JeStore</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data game yang tersedia
+        const games = [
+            {
+                id: 1,
+                title: "Hollow Knight",
+                genre: "Metroidvania",
+                price: 149000,
+                originalPrice: 149000, // Tambahkan harga asli
+                discount: 0, // Tambahkan diskon dalam persen
+                rating: 4.9,
+                description: "Petualangan platformer yang menakjubkan di dunia bawah tanah yang misterius.",
+                detailDescription: "Hollow Knight adalah game Metroidvania yang luar biasa dengan seni visual yang memukau dan gameplay yang menantang. Jelajahi dunia Hallownest yang luas dan misterius, bertarung melawan makhluk-makhluk aneh, dan ungkap rahasia gelap kerajaan serangga yang telah jatuh. Dengan lebih dari 130 musuh untuk dihadapi, 40+ karakter unik untuk ditemui, dan puluhan jam konten untuk dijelajahi.",
+                developer: "Team Cherry",
+                publisher: "Team Cherry",
+                releaseDate: "2017",
+                categories: ["adventure", "action"],
+                systemRequirements: {
+                    minimum: "Windows 7, Intel Core 2 Duo E5200, 4 GB RAM, DirectX 10",
+                    recommended: "Windows 10, Intel Core i5, 8 GB RAM, DirectX 11"
+                },
+                imageUrl: "img/HollowKnight.png" // Placeholder image URL
+            },
+            {
+                id: 2,
+                title: "Brawlhalla",
+                genre: "Fighting",
+                price: 0, // Harga 0 berarti GRATIS
+                originalPrice: 0,
+                discount: 0,
+                rating: 4.5,
+                description: "Game fighting platform gratis dengan lebih dari 50 Legends unik.",
+                detailDescription: "Brawlhalla adalah game fighting platform free-to-play yang mendukung hingga 8 pemain dalam pertandingan online atau lokal. Pilih dari lebih dari 50 Legends unik, masing-masing dengan set senjata dan kemampuan khusus. Dengan sistem ranking kompetitif, turnamen esports reguler, dan konten yang terus diperbarui, Brawlhalla menawarkan pengalaman fighting yang tak terbatas.",
+                developer: "Blue Mammoth Games",
+                publisher: "Ubisoft",
+                releaseDate: "2017",
+                categories: ["fighting", "action"],
+                systemRequirements: {
+                    minimum: "Windows 7, Intel Pentium 4, 1 GB RAM, DirectX 9",
+                    recommended: "Windows 10, Intel Core i3, 2 GB RAM, DirectX 11"
+                },
+                imageUrl: "img/Brawlhalla.png"
+            },
+            {
+                id: 3,
+                title: "Monster Hunter: World",
+                genre: "Action RPG",
+                price: 299000,
+                originalPrice: 299000,
+                discount: 0,
+                rating: 4.8,
+                description: "Berburu monster raksasa dalam dunia yang hidup dan bernapas.",
+                detailDescription: "Monster Hunter: World menghadirkan pengalaman berburu monster yang paling imersif. Jelajahi New World yang luas, lacak monster legendaris, dan gunakan lingkungan untuk keuntungan Anda. Dengan sistem crafting yang mendalam, kustomisasi senjata yang luas, dan mode co-op untuk hingga 4 pemain, setiap perburuan adalah petualangan epik yang unik.",
+                developer: "Capcom",
+                publisher: "Capcom",
+                releaseDate: "2018",
+                categories: ["action", "rpg"],
+                systemRequirements: {
+                    minimum: "Windows 7, Intel Core i5-4460, 8 GB RAM, DirectX 11",
+                    recommended: "Windows 10, Intel Core i7-3770, 16 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/MHWorld.png"
+            },
+            {
+                id: 4,
+                title: "Monster Hunter Wilds",
+                genre: "Action RPG",
+                price: 899000 * 0.75, // Contoh diskon 25%
+                originalPrice: 899000,
+                discount: 25,
+                rating: 4.7,
+                description: "Evolusi terbaru dari seri Monster Hunter dengan dunia yang lebih luas.",
+                detailDescription: "Monster Hunter Wilds adalah iterasi terbaru dari franchise Monster Hunter yang menghadirkan dunia yang lebih luas dan dinamis. Dengan teknologi grafis terdepan, sistem cuaca yang mempengaruhi gameplay, dan monster-monster baru yang menantang, game ini mendefinisikan ulang pengalaman berburu monster. Fitur multiplayer yang ditingkatkan memungkinkan kolaborasi yang lebih seamless.",
+                developer: "Capcom",
+                publisher: "Capcom",
+                releaseDate: "2025",
+                categories: ["action", "rpg"],
+                systemRequirements: {
+                    minimum: "Windows 10, Intel Core i5-10400, 16 GB RAM, DirectX 12",
+                    recommended: "Windows 11, Intel Core i7-10700K, 32 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/MHWild.png"
+            },
+            {
+                id: 5,
+                title: "Grand Theft Auto V",
+                genre: "Action Adventure",
+                price: 329000,
+                originalPrice: 329000,
+                discount: 0,
+                rating: 4.6,
+                description: "Petualangan kriminal epik di kota Los Santos yang luas.",
+                detailDescription: "GTA V menghadirkan dunia terbuka yang paling detail dan hidup yang pernah diciptakan Rockstar Games. Ikuti kisah tiga protagonis yang berbeda - Michael, Franklin, dan Trevor - dalam petualangan kriminal yang penuh aksi. Dengan mode online yang terus berkembang, misi yang beragam, dan kebebasan eksplorasi yang tak terbatas, GTA V menawarkan pengalaman gaming yang tak terlupakan.",
+                developer: "Rockstar North",
+                publisher: "Rockstar Games",
+                releaseDate: "2013",
+                categories: ["action", "adventure"],
+                systemRequirements: {
+                    minimum: "Windows 8.1, Intel Core 2 Quad CPU Q6600, 4 GB RAM, DirectX 10",
+                    recommended: "Windows 10, Intel Core i5 3470, 8 GB RAM, DirectX 11"
+                },
+                imageUrl: "img/GTA5.png"
+            },
+            {
+                id: 6,
+                title: "Red Dead Redemption 2",
+                genre: "Action Adventure",
+                price: 599000 * 0.5, // Contoh diskon 50%
+                originalPrice: 599000,
+                discount: 50,
+                rating: 4.9,
+                description: "Epik koboi di Amerika Barat yang memukau secara visual.",
+                detailDescription: "Red Dead Redemption 2 adalah mahakarya naratif yang mengisahkan kehidupan Arthur Morgan dan gang Van der Linde di penghujung era Wild West. Dengan dunia terbuka yang sangat detail, sistem honor yang mempengaruhi cerita, dan gameplay yang mendalam, setiap aspek kehidupan frontier Amerika terekam dengan sempurna. Dari berburu hingga poker, setiap aktivitas terasa autentik dan bermakna.",
+                developer: "Rockstar Studios",
+                publisher: "Rockstar Games",
+                releaseDate: "2018",
+                categories: ["action", "adventure"],
+                systemRequirements: {
+                    minimum: "Windows 7, Intel Core i5-2500K, 8 GB RAM, DirectX 10",
+                    recommended: "Windows 10, Intel Core i7-4770K, 12 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/RDR2.png"
+            },
+            {
+                id: 7,
+                title: "Red Dead Redemption",
+                genre: "Action Adventure",
+                price: 499000,
+                originalPrice: 499000,
+                discount: 0,
+                rating: 4.8,
+                description: "Kisah klasik John Marston di frontier Amerika.",
+                detailDescription: "Red Dead Redemption mengisahkan John Marston, mantan penjahat yang dipaksa memburu anggota gang lamanya. Dengan setting Wild West yang autentik, cerita yang emosional, dan gameplay yang revolusioner untuk masanya, game ini menetapkan standar untuk game Western. Jelajahi frontier yang luas, ikuti misi sampingan yang menarik, dan nikmati sistem honor yang mempengaruhi interaksi dengan NPC.",
+                developer: "Rockstar San Diego",
+                publisher: "Rockstar Games",
+                releaseDate: "2010",
+                categories: ["action", "adventure"],
+                systemRequirements: {
+                    minimum: "Windows 7, Intel Core 2 Duo E4700, 4 GB RAM, DirectX 9",
+                    recommended: "Windows 10, Intel Core i5-2400, 8 GB RAM, DirectX 11"
+                },
+                imageUrl: "img/RDR.png"
+            },
+            {
+                id: 8,
+                title: "God of War Ragnarök",
+                genre: "Action Adventure",
+                price: 699000,
+                originalPrice: 699000,
+                discount: 0,
+                rating: 4.9,
+                description: "Kelanjutan epik petualangan Kratos dan Atreus di mitologi Norse.",
+                detailDescription: "God of War Ragnarök melanjutkan kisah ayah dan anak dalam mitologi Norse yang semakin gelap. Dengan combat system yang disempurnakan, puzzle yang lebih kompleks, dan narasi yang lebih mendalam, game ini mengeksplorasi hubungan Kratos-Atreus sambil menghadapi Ragnarök. Visual yang memukau dan voice acting yang luar biasa menjadikan setiap momen terasa epic dan emosional.",
+                developer: "Santa Monica Studio",
+                publisher: "Sony Interactive Entertainment",
+                releaseDate: "2022",
+                categories: ["action", "adventure"],
+                systemRequirements: {
+                    minimum: "Windows 10, Intel Core i5-8400, 8 GB RAM, DirectX 12",
+                    recommended: "Windows 11, Intel Core i7-8700K, 16 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/GOWRagnarok.png"
+            },
+            {
+                id: 9,
+                title: "Borderlands 2",
+                genre: "Action RPG",
+                price: 199000 * 0.7, // Contoh diskon 30%
+                originalPrice: 199000,
+                discount: 30,
+                rating: 4.7,
+                description: "Shooter-looter yang gila dengan humor yang unik.",
+                detailDescription: "Borderlands 2 menggabungkan FPS dengan elemen RPG dalam dunia post-apocalyptic yang penuh warna. Pilih dari empat Vault Hunter yang unik, masing-masing dengan skill tree yang berbeda. Dengan sistem loot yang addictive, co-op untuk 4 pemain, dan humor yang khas Borderlands, game ini menawarkan puluhan jam gameplay yang menyenangkan dan replay value yang tinggi.",
+                developer: "Gearbox Software",
+                publisher: "2K Games",
+                releaseDate: "2012",
+                categories: ["action", "rpg"],
+                systemRequirements: {
+                    minimum: "Windows XP, Intel Core 2 Duo E5200, 2 GB RAM, DirectX 9",
+                    recommended: "Windows 7, Intel Core i5-2400, 4 GB RAM, DirectX 10"
+                },
+                imageUrl: "img/BD2.png"
+            },
+            {
+                id: 10,
+                title: "Borderlands 3",
+                genre: "Action RPG",
+                price: 399000,
+                originalPrice: 399000,
+                discount: 0,
+                rating: 4.5,
+                description: "Evolusi terbaru dari franchise shooter-looter populer.",
+                detailDescription: "Borderlands 3 menghadirkan aksi shooter-looter yang lebih epic dengan empat Vault Hunter baru dan milyaran senjata untuk dikumpulkan. Jelajahi planet-planet yang berbeda, hadapi Calypso Twins, dan nikmati gameplay yang dipoles dengan grafis yang memukau. Sistem skill tree yang flexible dan mode co-op yang seamless menjadikan setiap playthrough unik dan menyenangkan.",
+                developer: "Gearbox Software",
+                publisher: "2K Games",
+                releaseDate: "2019",
+                categories: ["action", "rpg"],
+                systemRequirements: {
+                    minimum: "Windows 7, AMD FX-8350, 6 GB RAM, DirectX 11",
+                    recommended: "Windows 10, Intel Core i7-4770, 16 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/BL3.png"
+            },
+            {
+                id: 11,
+                title: "Tiny Tina's Wonderlands",
+                genre: "Action RPG",
+                price: 599000 * 0.6, // Contoh diskon 40%
+                originalPrice: 599000,
+                discount: 40,
+                rating: 4.4,
+                description: "Petualangan fantasy yang gila dari universe Borderlands.",
+                detailDescription: "Tiny Tina's Wonderlands adalah spin-off Borderlands yang menggabungkan shooter-looter dengan elemen fantasy RPG. Dalam dunia D&D yang diatur oleh Tiny Tina, pemain dapat memilih dari berbagai class fantasy, menggunakan sihir dan senjata, serta menjelajahi dunia yang berubah sesuai imajinasi Tina. Dengan humor khas Borderlands dan gameplay yang fresh, game ini menawarkan pengalaman yang unik.",
+                developer: "Gearbox Software",
+                publisher: "2K Games",
+                releaseDate: "2022",
+                categories: ["action", "rpg"],
+                systemRequirements: {
+                    minimum: "Windows 10, Intel Core i5-3570, 8 GB RAM, DirectX 11",
+                    recommended: "Windows 10, Intel Core i7-4770, 16 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/TinyTina.png"
+            },
+            {
+                id: 12,
+                title: "It Takes Two",
+                genre: "Adventure Co-op",
+                price: 399000,
+                originalPrice: 399000,
+                discount: 0,
+                rating: 4.8,
+                description: "Petualangan co-op yang emosional tentang hubungan dan kerja sama.",
+                detailDescription: "It Takes Two adalah game co-op yang revolusioner yang menceritakan kisah pasangan suami istri yang berubah menjadi boneka. Dengan gameplay yang constantly evolving, setiap level memperkenalkan mekanik baru yang harus dikuasai bersama. Game ini menggabungkan platforming, puzzle, dan mini-games dengan narasi yang mendalam tentang hubungan, komunikasi, dan pentingnya kerja sama.",
+                developer: "Hazelight Studios",
+                publisher: "Electronic Arts",
+                releaseDate: "2021",
+                categories: ["adventure", "action"],
+                systemRequirements: {
+                    minimum: "Windows 8.1, Intel Core i3-2100T, 8 GB RAM, DirectX 11",
+                    recommended: "Windows 10, Intel Core i5-3570K, 16 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/ItTakesTwo.png"
+            },
+            {
+                id: 13,
+                title: "Need for Speed Heat",
+                genre: "Racing",
+                price: 349000,
+                originalPrice: 349000,
+                discount: 0,
+                rating: 4.3,
+                description: "Balapan jalanan yang intens dengan sistem siang-malam yang unik.",
+                detailDescription: "Need for Speed Heat menghadirkan balapan jalanan Palm City dengan sistem siang-malam yang revolusioner. Siang hari untuk balapan legal dan malam hari untuk street racing ilegal dengan risiko dikejar polisi. Kustomisasi mobil yang mendalam, handling yang responsif, dan sistem heat yang menantang menjadikan setiap balapan terasa intens dan menegangkan.",
+                developer: "Ghost Games",
+                publisher: "Electronic Arts",
+                releaseDate: "2019",
+                categories: ["racing", "action"],
+                systemRequirements: {
+                    minimum: "Windows 10, Intel Core i5-3570K, 8 GB RAM, DirectX 11",
+                    recommended: "Windows 10, Intel Core i7-4790, 16 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/NFSHeat.png"
+            },
+            {
+                id: 14,
+                title: "The Forest",
+                genre: "Survival Horror",
+                price: 199000,
+                originalPrice: 199000,
+                discount: 0,
+                rating: 4.6,
+                description: "Survival horror yang menegangkan di hutan yang dipenuhi kanibal.",
+                detailDescription: "The Forest adalah game survival horror yang menempatkan pemain sebagai satu-satunya penyintas kecelakaan pesawat di hutan yang dipenuhi kanibal mutan. Bangun shelter, craft tools, dan bertahan hidup sambil mencari anak yang hilang. Dengan sistem building yang kreatif, AI musuh yang cerdas, dan atmosfer horror yang mencekam, setiap malam adalah perjuangan untuk bertahan hidup.",
+                developer: "Endnight Games",
+                publisher: "Endnight Games",
+                releaseDate: "2018",
+                categories: ["horror", "adventure"],
+                systemRequirements: {
+                    minimum: "Windows 7, Intel Dual-Core 2.4 GHz, 4 GB RAM, DirectX 9",
+                    recommended: "Windows 10, Intel Core i5-8400, 12 GB RAM, DirectX 11"
+                },
+                imageUrl: "img/TheFotrest.png"
+            },
+            {
+                id: 15,
+                title: "Resident Evil 2 Remake",
+                genre: "Survival Horror",
+                price: 399000 * 0.65, // Contoh diskon 35%
+                originalPrice: 399000,
+                discount: 35,
+                rating: 4.8,
+                description: "Remake modern dari klasik survival horror yang ikonik.",
+                detailDescription: "Resident Evil 2 Remake merekonstruksi ulang klasik 1998 dengan grafis modern dan gameplay yang dipoles. Ikuti Leon Kennedy dan Claire Redfield dalam Raccoon City yang dipenuhi zombie. Dengan sistem inventory yang strategis, puzzle yang menantang, dan atmosfer horror yang mencekam, game ini membuktikan bahwa remake dapat melampaui originalnya tanpa kehilangan jiwa klasiknya.",
+                developer: "Capcom",
+                publisher: "Capcom",
+                releaseDate: "2019",
+                categories: ["horror", "action"],
+                systemRequirements: {
+                    minimum: "Windows 7, Intel Core i5-4460, 8 GB RAM, DirectX 11",
+                    recommended: "Windows 10, Intel Core i7-3770, 16 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/RE2Remake.png"
+            },
+            {
+                id: 16,
+                title: "Resident Evil Village",
+                genre: "Survival Horror",
+                price: 599000,
+                originalPrice: 599000,
+                discount: 0,
+                rating: 4.7,
+                description: "Kelanjutan kisah Ethan Winters dengan setting gothic yang memukau.",
+                detailDescription: "Resident Evil Village melanjutkan kisah Ethan Winters dalam desa misterius yang dipenuhi makhluk supernatural. Dengan setting gothic yang atmosferik, berbagai tipe musuh yang unik, dan sistem crafting yang diperluas, game ini menggabungkan elemen horror klasik dengan gameplay modern. Lady Dimitrescu dan villain lainnya menjadi ikon baru dalam franchise RE.",
+                developer: "Capcom",
+                publisher: "Capcom",
+                releaseDate: "2021",
+                categories: ["horror", "action"],
+                systemRequirements: {
+                    minimum: "Windows 10, Intel Core i5-7500, 8 GB RAM, DirectX 12",
+                    recommended: "Windows 10, Intel Core i7-8700, 16 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/REVillage.png"
+            },
+            {
+                id: 17,
+                title: "Tekken 8",
+                genre: "Fighting",
+                price: 699000,
+                originalPrice: 699000,
+                discount: 0,
+                rating: 4.6,
+                description: "Evolusi terbaru dari legendary fighting game franchise.",
+                detailDescription: "Tekken 8 menghadirkan pertarungan yang lebih intens dengan sistem Heat yang revolusioner. Dengan roster karakter yang diperluas, grafis yang memukau, dan sistem combo yang diperdalam, game ini menawarkan pengalaman fighting yang tak tertandingi. Mode story yang cinematik dan multiplayer kompetitif menjadikan Tekken 8 sebagai puncak dari franchise fighting legendaris ini.",
+                developer: "Bandai Namco Studios",
+                publisher: "Bandai Namco Entertainment",
+                releaseDate: "2024",
+                categories: ["fighting", "action"],
+                systemRequirements: {
+                    minimum: "Windows 10, Intel Core i5-6600K, 8 GB RAM, DirectX 12",
+                    recommended: "Windows 11, Intel Core i7-7700K, 16 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/Tekken8.png"
+            },
+            {
+                id: 18,
+                title: "The Witcher 3: Wild Hunt",
+                genre: "Action RPG",
+                price: 299000 * 0.8, // Contoh diskon 20%
+                originalPrice: 299000,
+                discount: 20,
+                rating: 4.9,
+                description: "RPG epik yang mendefinisikan ulang standar open-world gaming.",
+                detailDescription: "The Witcher 3: Wild Hunt adalah mahakarya RPG yang mengikuti Geralt of Rivia dalam pencarian terakhirnya untuk Ciri. Dengan dunia terbuka yang luas, quest yang bermakna, dan sistem pilihan yang mempengaruhi ending, setiap keputusan memiliki konsekuensi. DLC yang luar biasa seperti Blood and Wine menambah puluhan jam konten berkualitas tinggi, menjadikan game ini sebagai salah satu RPG terbaik sepanjang masa.",
+                developer: "CD Projekt Red",
+                publisher: "CD Projekt Red",
+                releaseDate: "2015",
+                categories: ["rpg", "adventure"],
+                systemRequirements: {
+                    minimum: "Windows 7, Intel Core i5-2500K, 6 GB RAM, DirectX 11",
+                    recommended: "Windows 10, Intel Core i7-3770, 8 GB RAM, DirectX 12"
+                },
+                imageUrl: "img/TWitcher3.png"
+            }
+        ];
+
+        let cart = []; // Array untuk menyimpan item-item di keranjang
+        let filteredGames = games; // Variabel untuk menyimpan game yang difilter
+
+        // Inisialisasi halaman saat DOM selesai dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            displayGames(games); // Tampilkan semua game saat pertama kali dimuat
+            setupEventListeners(); // Atur event listener untuk interaksi
+            updateCartDisplay(); // Panggil ini untuk memastikan tampilan keranjang awal benar
+        });
+
+        // Fungsi untuk mengatur semua event listener
+        function setupEventListeners() {
+            // Fungsionalitas pencarian
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                filteredGames = games.filter(game => 
+                    game.title.toLowerCase().includes(searchTerm) ||
+                    game.genre.toLowerCase().includes(searchTerm) ||
+                    game.description.toLowerCase().includes(searchTerm)
+                );
+                displayGames(filteredGames); // Tampilkan game yang sesuai dengan pencarian
+            });
+
+            // Tombol filter
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Hapus kelas 'active' dari semua tombol filter
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    // Tambahkan kelas 'active' ke tombol yang diklik
+                    this.classList.add('active');
+                    
+                    const filter = this.dataset.filter; // Ambil nilai data-filter
+                    if (filter === 'all') {
+                        filteredGames = games; // Jika 'all', tampilkan semua game
+                    } else {
+                        // Filter game berdasarkan kategori yang dipilih
+                        filteredGames = games.filter(game => game.categories.includes(filter));
+                    }
+                    displayGames(filteredGames); // Tampilkan game yang sudah difilter
+                });
+            });
+        }
+
+        // Fungsi untuk menampilkan game di grid
+        function displayGames(gamesToShow) {
+            const gamesGrid = document.getElementById('gamesGrid');
+            gamesGrid.innerHTML = ''; // Kosongkan grid sebelum menambahkan game baru
+
+            gamesToShow.forEach(game => {
+                const gameCard = document.createElement('div');
+                gameCard.className = 'game-card';
+                gameCard.innerHTML = `
+                    <div class="game-image" style="background-image: url('${game.imageUrl}'); background-size: cover; background-position: center;"></div>
+                    <div class="game-info">
+                        <h3 class="game-title">${game.title}</h3>
+                        <p class="game-genre">${game.genre}</p>
+                        <p class="game-description">${game.description}</p>
+                        <div class="game-rating">
+                            <span class="stars">${'★'.repeat(Math.floor(game.rating))}${'☆'.repeat(5-Math.floor(game.rating))}</span>
+                            <span>${game.rating}/5</span>
+                        </div>
+                        <div class="game-price">${game.price === 0 ? 'GRATIS' : formatPrice(game.price)}</div>
+                        <button class="add-to-cart" onclick="addToCart(${game.id})">
+                            ${game.price === 0 ? 'Download' : 'Tambah ke Keranjang'}
+                        </button>
+                    </div>
+                `;
+                
+                // Tambahkan event listener untuk menampilkan detail game saat card diklik (kecuali tombol add-to-cart)
+                gameCard.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('add-to-cart')) {
+                        showGameDetail(game.id);
+                    }
+                });
+                
+                gamesGrid.appendChild(gameCard);
+            });
+        }
+
+        // Fungsi untuk memformat harga ke format Rupiah
+        function formatPrice(price) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(price);
+        }
+
+        // Fungsi untuk menambahkan game ke keranjang
+        function addToCart(gameId) {
+            const game = games.find(g => g.id === gameId);
+            // Pastikan game ada dan belum ada di keranjang
+            if (game && !cart.find(item => item.id === gameId)) {
+                cart.push({...game, quantity: 1}); // Tambahkan game ke keranjang dengan quantity 1
+                updateCartDisplay(); // Perbarui tampilan keranjang
+                
+                // Tampilkan notifikasi
+                showNotification(`${game.title} ditambahkan ke keranjang!`);
+                console.log('Game ditambahkan ke keranjang:', game.title, 'Keranjang saat ini:', cart); // Log untuk debugging
+            } else if (game) {
+                showNotification(`${game.title} sudah ada di keranjang!`); // Notifikasi jika game sudah ada
+                console.log('Game sudah ada di keranjang:', game.title); // Log untuk debugging
+            }
+        }
+
+        // Fungsi untuk menghapus game dari keranjang
+        function removeFromCart(gameId) {
+            cart = cart.filter(item => item.id !== gameId); // Hapus item dari array cart
+            updateCartDisplay(); // Perbarui tampilan keranjang
+            console.log('Game dihapus dari keranjang. Keranjang saat ini:', cart); // Log untuk debugging
+        }
+
+        // Fungsi untuk memperbarui tampilan keranjang belanja
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cartCount');
+            const cartItemsList = document.getElementById('cartItemsList'); // Menggunakan ID baru untuk daftar item
+            const cartSummaryTotal = document.getElementById('cartSummaryTotal'); // Menggunakan ID baru untuk total ringkasan
+            
+            cartCount.textContent = cart.length; // Perbarui jumlah item di ikon keranjang
+            
+            if (cart.length === 0) {
+                cartItemsList.innerHTML = '<p style="text-align: center; opacity: 0.7; padding: 2rem;">Keranjang kosong</p>';
+                cartSummaryTotal.textContent = 'Rp 0';
+            } else {
+                // Buat HTML untuk setiap item di keranjang dengan detail lebih kaya
+                cartItemsList.innerHTML = cart.map(item => `
+                    <div class="cart-item-full">
+                        <div class="cart-item-full-image" style="background-image: url('${item.imageUrl}');"></div>
+                        <div class="cart-item-full-details">
+                            <div class="cart-item-full-title">${item.title}</div>
+                            <div class="cart-item-full-desc">${item.description}</div>
+                            <div class="cart-item-full-price-info">
+                                ${item.discount > 0 ? `<span class="cart-item-full-discount">-${item.discount}%</span>` : ''}
+                                ${item.discount > 0 ? `<span class="cart-item-full-original-price">${formatPrice(item.originalPrice)}</span>` : ''}
+                                <span class="cart-item-full-current-price">${item.price === 0 ? 'GRATIS' : formatPrice(item.price)}</span>
+                            </div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <button class="cart-item-remove-btn" onclick="removeFromCart(${item.id})">Hapus</button>
+                            <!-- Tambahkan opsi lain di sini jika diperlukan, misal "Move to Wishlist" -->
+                        </div>
+                    </div>
+                `).join(''); // Gabungkan semua string HTML
+                
+                // Hitung total harga
+                const total = cart.reduce((sum, item) => sum + item.price, 0);
+                cartSummaryTotal.textContent = formatPrice(total);
+            }
+            console.log('Tampilan keranjang diperbarui. Total item:', cart.length, 'Total harga:', cartSummaryTotal.textContent); // Log untuk debugging
+        }
+
+        // Fungsi untuk membuka/menutup modal keranjang gaya halaman penuh
+        function toggleCartPage() {
+            const cartPageModal = document.getElementById('cartPageModal');
+            cartPageModal.classList.toggle('active'); // Toggle kelas 'active' untuk menampilkan/menyembunyikan
+            updateCartDisplay(); // Panggil ini untuk memastikan tampilan keranjang selalu terbaru saat dibuka
+            console.log('Modal keranjang halaman penuh dibuka/ditutup. Status aktif:', cartPageModal.classList.contains('active')); // Log untuk debugging
+        }
+
+        // Fungsi untuk menampilkan detail game di modal
+        function showGameDetail(gameId) {
+            const game = games.find(g => g.id === gameId);
+            if (!game) return; // Jika game tidak ditemukan, keluar
+
+            const modal = document.getElementById('gameModal');
+            const content = document.getElementById('gameDetailContent');
+            
+            // Isi konten modal detail game
+            content.innerHTML = `
+                <div class="game-detail-image" style="background-image: url('${game.imageUrl}'); background-size: cover; background-position: center;"></div>
+                <div class="game-detail-info">
+                    <h2>${game.title}</h2>
+                    <div class="game-detail-meta">
+                        <div class="meta-item">
+                            <div class="meta-label">Genre</div>
+                            <div>${game.genre}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Developer</div>
+                            <div>${game.developer}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Publisher</div>
+                            <div>${game.publisher}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Release Date</div>
+                            <div>${game.releaseDate}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Rating</div>
+                            <div>${'★'.repeat(Math.floor(game.rating))}${'☆'.repeat(5-Math.floor(game.rating))} ${game.rating}/5</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Price</div>
+                            <div style="color: #ffe66d; font-weight: bold; font-size: 1.2rem;">${game.price === 0 ? 'GRATIS' : formatPrice(game.price)}</div>
+                        </div>
+                    </div>
+                    <h3>Deskripsi</h3>
+                    <p style="margin-bottom: 1rem;">${game.detailDescription}</p>
+                    <h3>System Requirements</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="meta-item">
+                            <div class="meta-label">Minimum</div>
+                            <div style="font-size: 0.9rem;">${game.systemRequirements.minimum}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Recommended</div>
+                            <div style="font-size: 0.9rem;">${game.systemRequirements.recommended}</div>
+                        </div>
+                    </div>
+                    <button class="add-to-cart" onclick="addToCart(${game.id}); closeModal();" style="margin-top: 1rem;">
+                        ${game.price === 0 ? 'Download' : 'Tambah ke Keranjang'}
+                    </button>
+                </div>
+            `;
+            
+            modal.style.display = 'block'; // Tampilkan modal
+            console.log('Modal detail game dibuka untuk ID:', gameId); // Log untuk debugging
+        }
+
+        // Fungsi untuk menutup modal detail game
+        function closeModal() {
+            document.getElementById('gameModal').style.display = 'none';
+            console.log('Modal detail game ditutup.'); // Log untuk debugging
+        }
+
+        // Fungsi untuk proses checkout
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Keranjang belanja kosong!');
+                console.log('Checkout gagal: Keranjang kosong.'); // Log untuk debugging
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const gameList = cart.map(item => `- ${item.title} (${item.price === 0 ? 'GRATIS' : formatPrice(item.price)})`).join('\n');
+            
+            const whatsappNumber = '6281367685245'; // Ganti dengan nomor WhatsApp Anda
+            const message = `Halo JeStore, saya ingin memesan game berikut:\n\n${gameList}\n\nTotal Pembayaran: ${formatPrice(total)}\n\nMohon informasinya untuk proses pembayaran selanjutnya. Terima kasih!`;
+            
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappUrl, '_blank'); // Buka link WhatsApp di tab baru
+            
+            showNotification('Anda akan diarahkan ke WhatsApp untuk menyelesaikan pembayaran.');
+            
+            cart = []; // Kosongkan keranjang setelah checkout
+            updateCartDisplay(); // Perbarui tampilan keranjang
+            toggleCartPage(); // Tutup modal keranjang halaman penuh
+            console.log('Checkout berhasil. Keranjang dikosongkan dan diarahkan ke WhatsApp.'); // Log untuk debugging
+        }
+
+        // Fungsi untuk menampilkan notifikasi kustom (mengganti alert)
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(45deg, #4ecdc4, #44a08d);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 3000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Hapus notifikasi setelah 3 detik dengan animasi fade out
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+            console.log('Notifikasi ditampilkan:', message); // Log untuk debugging
+        }
+
+        // Tutup modal saat mengklik di luar area modal
+        window.onclick = function(event) {
+            const gameModal = document.getElementById('gameModal');
+            const cartPageModal = document.getElementById('cartPageModal'); 
+            
+            if (event.target === gameModal) {
+                closeModal();
+            }
+            if (event.target === cartPageModal && cartPageModal.classList.contains('active')) {
+                toggleCartPage(); // Tutup modal keranjang halaman penuh
+            }
+        }
+
+        // Tambahkan CSS untuk animasi notifikasi
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
